@@ -22,16 +22,18 @@ Enter answers to the questions just below the >Answer: prompt.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer:
+I do not have previous experience directly with R or Git. I have taken some introductory coding classes via General Assembly in the past, which covered HTML, CSS, Javascript and some exposure to version control with GitHub. Data analytics I have experienced more informally via my past roles in product analytics. 
 
 2. Are there any components of the course about which you feel confident?
 
 > Answer: 
+I feel good about the coding basics and mindset around coding since I have some experience with it.
 
 3. Are there any components of the course about which you feel apprehensive?
 
 > Answer: 
-
+I feel apprehensive about some of the later modules like time series and spatial analysis, but I am excited to learn more!
 
 ## 2) GitHub
 
