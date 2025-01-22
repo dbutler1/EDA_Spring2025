@@ -1,9 +1,4 @@
-title: "2: Reproducibility and Coding Basics"
-subtitle: "Environmental Data Analytics"
-author: "John Fay and Luana Lima | Developed by Kateri Salk"
-date: "Spring 2025"
-output: pdf_document
----
+title: "2: Reproducibility and Coding Basics" subtitle: "Environmental Data Analytics" author: "John Fay and Luana Lima \| Developed by Kateri Salk" date: "Spring 2025" output: pdf_document ---
 
 ## Objectives
 
@@ -84,6 +79,8 @@ Below is a chunk of R code. You can run R code in several ways:
 sqrt(25)
 sin(3)
 pi
+sin(3)
+sqrt(50)
 
 # Summary statistics
 mean(5, 4, 6, 4, 6)
@@ -105,6 +102,7 @@ A quick note: in many situations, a `=` sign will substitute for a `<-`. Resist 
 
 ```{r}
 x <- 3*4
+x <- 5*8
 ```
 
 Now, call up the object `x`. Notice that `x` has also just shown up in your Environment tab.
@@ -127,6 +125,7 @@ What happens if there is a typo in your code? Type the following in the R window
 
 ```{r}
 long_name_for_illustration <- 11
+long_name_for_illustration
 
 ```
 
@@ -136,6 +135,7 @@ Within your R code, it is often useful to include notes about your workflow. So 
 
 ```{r}
 # I am demonstrating a comment here. 
+#commenting here as practice 
 
 1 + 1 # This is a simple math problem
 ```
@@ -203,7 +203,7 @@ recipe3 <- function(x, f){
 }
 
 doublecomplexmeal <- recipe3(x = 5, f = 2)
-doublecomplexmeal
+doublecomplexmeall
 doublecomplexmeal$mix1
 ```
 
