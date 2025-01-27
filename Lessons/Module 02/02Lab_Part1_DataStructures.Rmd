@@ -39,10 +39,11 @@ vector1 <- c(1,2,5.3,6,-2,4) # Vector type: Numeric
 vector1
 class(vector1)
 
-vector2 <- c("one","two","three") # Vector type: 
+vector2 <- c("one","two","three") # Vector type: Character
 vector2
+class(vector2)
 
-vector3 <- c(TRUE,TRUE,TRUE,FALSE,TRUE,FALSE) # Vector type:
+vector3 <- c(TRUE,TRUE,TRUE,FALSE,TRUE,FALSE) # Vector type: Logic
 vector3
 ```
 
@@ -60,7 +61,7 @@ max(vector1)
 vector4 <- c(10:15)
 
 #
-c(vector1, vector4)
+test <- c(vector1, vector4)
 
 #
 vector1 * vector4
@@ -71,7 +72,7 @@ vector1 * 10
 #
 toupper(vector2) 
 
-#
+#Logic - changing from true to false and vice versa
 !vector3
 
 ```
@@ -83,15 +84,18 @@ Find a 5-day forecast of temperatures (Fahrenheit) for Durham, North Carolina. C
 ```{r Vector Exercise}
 
 #Assign to the variable 'temps_F' a vector of high temperatures in F
-
+temps_F <- c(43,47,53,54,60)
 
 #What is the average of these temperatures 
-
+mean(temps_F)
 
 #Compute the difference between each temperature and the average calculated above
-
+temps_F-mean(temps_F)
 
 #Subtract 32 and multiply by 5/9ths to create a vector in Celsius
+temps_F-32*(5/9)
+temps_C <- c(temps_F-32*(5/9))
+
 
 
 ```
@@ -103,11 +107,11 @@ Complete the comments below:
 # Matrices ----
 matrix1 <- matrix(1:20, nrow = 5,ncol = 4) # 
 matrix1
-#matrix1 has __ rows and __ columns
+#matrix1 has 5 rows and 4 columns
 
 matrix2 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE) #
 matrix2
-#matrix2 has __ rows and __ columns
+#matrix2 has 5 rows and 4 columns
 
 matrix3 <- matrix(
   data = 1:20, 
@@ -126,11 +130,10 @@ matrix3 <- matrix(
 Add comments in the code chunk below to indicate type of vectors created and what each operation does.
 ```{r Matrix Operations}
 
-matrix1[4, 1] #
+matrix1[4, 1] #4
 
-matrix1[4,  ] #
-
-matrix1[ , 3] #
+matrix1[4,  ] #4, 9, 14, 19 - print full row
+matrix1[ , 3] #print full column 
 
 matrix1[c(12, 14)] #
 
@@ -163,6 +166,8 @@ matrix4['R2','C1']
 ### Exercise 1b: Matrices
 Compute the mean of column "C2" in matrix4. (Should be 14.5)
 ```{r Matrix Exercise}
+mean(matrix4[,"C2"])
+
 
 ```
 
@@ -190,7 +195,7 @@ list1 <- list(
 list1
 
 #
-list1$age
+list1$name
 
 #
 names(list1)
@@ -210,15 +215,15 @@ list1[[4]] = 44
 ```{r Creating data frames}
 # Data Frames ----
 #Create three vectors of equal length
-d <- c(1, 2, 3, 4) # What type of vector?
-e <- c("red", "white", "red", NA) # What type of vector?
-f <- c(TRUE, TRUE, TRUE, FALSE) # What type of vector?
+d <- c(1, 2, 3, 4) # What type of vector? Num
+e <- c("red", "white", "red", NA) # What type of vector? Char
+f <- c(TRUE, TRUE, TRUE, FALSE) # What type of vector? Logic
 
 #Combine the vectors into a dataframe
 dataframe1 <- data.frame(d,e,f) 
 
 #Set the column names & View
-names(dataframe1) <- c("ID","Color","Passed"); View(dataframe1) # 
+names(dataframe1) <- c("ID","Color","Passed"); View(dataframe1) #need to comment out view when knitting
 
 #Add a new column to the dataframe
 dataframe1$month <- c('Jan','Feb', 'Mar', 'Apr')
