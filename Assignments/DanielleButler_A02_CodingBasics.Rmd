@@ -58,7 +58,15 @@ if (mean(sequence1) > median(sequence1)) {
 8.  Label the columns of your data frame with informative titles.
 
 ```{r basics 2}
+#Creating 3 vectors with data provided.
+student_names <- c("Bob","Joe","Sally","Michelle") #Vector type: Character
+test_scores <- c(100,90,80,70) #Vector type: Numeric
+scholarships <- c(TRUE,FALSE,TRUE,FALSE) #Vector type: Logic
 
+StudentInfo <- data.frame(student_names,test_scores,scholarships) 
+names(StudentInfo) <- c("Names","Scores","Scholarships")
+
+#View(StudentInfo) #need to comment out view when knitting
 
 ```
 
