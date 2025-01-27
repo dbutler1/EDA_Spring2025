@@ -31,11 +31,19 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r basics 1}
-#1. seq(1, 55, by = 5)
+#1. Creating a vector for a sequence of numbers 1-55 by 5 
+sequence1 <- c(seq(from=1,to=55,by=5))
 
-#2. 
+#2. Computing the mean and median of the sequence 
+mean(sequence1)
+median(sequence1)
 
-#3. 
+#3. Determining if mean is great than median 
+if (mean(sequence1) > median(sequence1)) {
+  print("The mean is greater than the median.") 
+} else {
+  print("The mean is not greater than the median.")
+}
 
 ```
 
