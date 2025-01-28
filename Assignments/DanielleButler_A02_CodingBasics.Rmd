@@ -118,7 +118,7 @@ newfunction50(52.5)
 ```{r basics 3}
 
 #13a. Run the first function with the vector of test scores
-function50(test_scores)
+#function50(test_scores)
 
 #13b. Run the second function with the vector of test scores
 newfunction50(test_scores)
