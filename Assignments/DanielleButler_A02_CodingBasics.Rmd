@@ -33,18 +33,18 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 ```{r basics 1}
 #1. Creating a vector for a sequence of numbers 1-55 by 5 
 sequence1 <- c(seq(from=1,to=55,by=5))
+sequence1
 
 #2. Computing the mean and median of the sequence 
 mean(sequence1)
 median(sequence1)
 
-#3. Determining if mean is great than median 
+#3. Determining if mean is greater than median 
 if (mean(sequence1) > median(sequence1)) {
   print("The mean is greater than the median.") 
 } else {
   print("The mean is not greater than the median.")
 }
-
 ```
 
 ## Basics, Part 2
@@ -67,7 +67,6 @@ StudentInfo <- data.frame(student_names,test_scores,scholarships)
 names(StudentInfo) <- c("Names","Scores","Scholarships")
 
 #View(StudentInfo) #need to comment out view when knitting
-
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
@@ -78,49 +77,41 @@ types of data.
 10. Create a function with one input. In this function, use `if`...`else` to evaluate the value of the input: if it is greater than 50, print the word "Pass"; otherwise print the word "Fail". 
 ```{r}
 #10. Create a function using if...else
- functionx5 <- function(x){
-  multiplyby5 <- x*5
-  return(multiplyby5)
-  if (x>50) {print("Pass")}
-  else {print("Fail")}
+ function50 <- function(x){
+  if(x > 50) {print("Pass") 
+  } 
+  else {
+    print("Fail")
   }
-  
-functionx5(5)
-
+ }
+function50(55)
 ```
-
 
 11. Create a second function that does the exact same thing as the previous one but uses `ifelse()` instead if `if`...`else `. 
 
 ```{r}
 #11. Create a function using ifelse()
 
- newfunctionx5 <- function(x){
-  multiplyby5 <- x*5
-  return(multiplyby5)
-  ifelse ( x >50, "Pass", "Fail"  )
-  }
-  
-newfunctionx5(5)
+ newfunction50 <- function(x){
+  ifelse(x>50,"Pass","Fail")
+ }
 
+newfunction50(10)
+  
 ```
 
-
 12. Run both functions using the value 52.5 as the input
-
 
 ```{r}
 #12a. Run the first function with the value 52.5
 
-functionx5(52.5)
+function50(52.5)
 
 #12b. Run the second function with the value 52.5
 
-newfunctionx5(52.5)
-
+newfunction50(52.5)
 
 ```
-
 
 13. Run both functions using the **vector** of student test scores you created as the input. (Only one will work properly...)
 
