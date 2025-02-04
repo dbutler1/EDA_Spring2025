@@ -165,36 +165,31 @@ this class makes sense.
 conducted by publication year.
 
 ```{r}
-ggplot(Neonics, aes(Publication.Year) +
-  geom_freqpoly(binwidth = 500)
-)
 
-
-geom_freqpoly(
-  mapping = NULL,
-  data = NULL,
-  stat = "bin",
-  position = "identity",
-  ...,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
+ggplot(Neonics,aes(x=Publication.Year)) +
+  geom_freqpoly()
 
 ```
 
-10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
+10. Reproduce the same graph but now add a color aesthetic so that different 
+Test.Location are displayed as different colors.
 
 ```{r}
 
+ggplot(Neonics,aes(x=Publication.Year,color=Test.Location)) +
+  geom_freqpoly()
 
 ```
 
-Interpret this graph. What are the most common test locations, and do they differ over time?
+Interpret this graph. What are the most common test locations, and do they 
+differ over time?
 
-> Answer:
+> Answer: The more common test locations are the lab and field natural. Lab 
+definitely takes over from 2000 onward. Field natural is the closest but in 
+2015, Lab is out doing Field natural by at least 3x.  
 
-11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
+11. Create a bar graph of Endpoint counts. What are the two most common 
+end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
 [**TIP**: Add `theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))` to the end of your plot command to rotate and align the X-axis labels...]
 
