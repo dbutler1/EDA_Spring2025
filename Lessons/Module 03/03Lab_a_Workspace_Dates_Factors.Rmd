@@ -244,7 +244,6 @@ class(sites$dow)
 unique(sites$dow)
 
 #Summary - is it meaningful?
-summary(sites$dow)
 
 #Show the levels associated with our factor column
 levels(sites$dow)

@@ -6,7 +6,10 @@ output: pdf_document
 ---
 
 ## Set up the session
-- Load packaged: tidyverse, lubridate, & here
+- Load packa
+
+
+ged: tidyverse, lubridate, & here
 - Import the `EPAair_PM25_NC2019_raw.csv` file
   - Set strings to be read in as factors
   - Set the "Site.ID" column to be read in as a factor
@@ -26,7 +29,8 @@ pm25 <- read.csv(file = here('Data','Raw','EPAair_PM25_NC2019_raw.csv'),
 )
 
 #Fix the date
-pm25$Date <- mdy(pm25$Date)
+pm25$Date <- mdy(pm25$Date
+                 )
 
 ```
 

@@ -132,7 +132,8 @@ A box-and-whisker plot is yet another alternative to histograms (distributions o
 
 * Points representing outliers, values that fall outside 1.5 times the IQR. 
 
-An alternate option is a violin plot, which displays density distributions, somewhat like a hybrid of the box-and-whiskers and the frequency polygon plot.
+An alternate option is a violin plot, which displays density di
+stributions, somewhat like a hybrid of the box-and-whiskers and the frequency polygon plot.
 
 ```{r, fig.height = 3, fig.width = 4}
 #
