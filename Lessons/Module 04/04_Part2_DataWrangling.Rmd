@@ -173,7 +173,7 @@ write.csv(LitterTrap, row.names = FALSE,
 ```
 
 ## Split-Apply-Combine
-
+k
 dplyr functionality, combined with the pipes operator, allows us to split datasets according to groupings (function: `group_by`), then run operations on those groupings and return the output of those operations. There is a lot of flexibility in this approach, but we will illustrate just one example today.
 
 ```{r split-apply-combine}
