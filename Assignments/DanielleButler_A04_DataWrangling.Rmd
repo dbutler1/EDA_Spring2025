@@ -57,7 +57,9 @@ dim(PM25_2019)
 
 ```
 
->All four datasets should have the same number of columns but unique record counts (rows). Do your datasets follow this pattern? Yes, there are 20 columns in each dataset with unique row amounts.
+>All four datasets should have the same number of columns but unique record
+counts (rows). Do your datasets follow this pattern? Yes, there are 20 columns
+in each dataset with unique row amounts.
 
 ## Wrangle individual datasets to create processed files.
 
@@ -78,13 +80,13 @@ PM25_2019$Date <- mdy(PM25_2019$Date)
 
 #4
 O3_2018_Select <- select(O3_2018, Date, DAILY_AQI_VALUE, Site.Name,
-                         AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+                  AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
 O3_2019_Select <- select(O3_2019, Date, DAILY_AQI_VALUE, Site.Name,
-                         AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+                  AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
 PM25_2018_Select <- select(PM25_2018, Date, DAILY_AQI_VALUE, Site.Name,
-                           AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+                   AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
 PM25_2019_Select <- select(PM25_2019, Date, DAILY_AQI_VALUE, Site.Name,
-                           AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+                  AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
 
 #5
 PM25_2018_Select <- mutate(PM25_2018_Select, AQS_PARAMETER_DESC = ("PM2.5"))
@@ -216,5 +218,7 @@ dim(EPAair_Summary_omit)
 
 14. Why did we use the function `drop_na` rather than `na.omit`? Hint: replace `drop_na` with `na.omit` in part 12 and observe what happens with the dimensions of the summary date frame.
 
-> Answer: na.omit got rid of more rows - it dropped to 101 vs the drop_na was at 182. na_omit will remove rows if any column is NA, whereas drop_na will drop only for specifically the column in the function.
+> Answer: na.omit got rid of more rows - it dropped to 101 vs the drop_na was 
+at 182. na_omit will remove rows if any column is NA, whereas drop_na will drop 
+only for specifically the column in the function.
 
