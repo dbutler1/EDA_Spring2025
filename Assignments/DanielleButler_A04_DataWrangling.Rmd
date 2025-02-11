@@ -76,7 +76,7 @@ O3_2019$Date <- mdy(O3_2019$Date)
 PM25_2018$Date <- mdy(PM25_2018$Date)
 PM25_2019$Date <- mdy(PM25_2019$Date)
 
-#4.
+#4
 O3_2018_Select <- select(O3_2018, Date, DAILY_AQI_VALUE, Site.Name,
                          AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
 O3_2019_Select <- select(O3_2019, Date, DAILY_AQI_VALUE, Site.Name,
@@ -90,7 +90,7 @@ PM25_2019_Select <- select(PM25_2019, Date, DAILY_AQI_VALUE, Site.Name,
 PM25_2018_Select <- mutate(PM25_2018_Select, AQS_PARAMETER_DESC = ("PM2.5"))
 PM25_2019_Select <- mutate(PM25_2019_Select, AQS_PARAMETER_DESC = ("PM2.5"))
 
-#6.
+#6
 
 write.csv(PM25_2018_Select, row.names = FALSE, 
           file = (here("./Data/Processed/EPAair_PM25_NC2018_processed.csv")))
@@ -144,33 +144,41 @@ colnames(PM25_2019_Select)
 EPAair_combined <- rbind(O3_2018_Select, O3_2019_Select, PM25_2018_Select, 
                          PM25_2019_Select)
 
+dim(EPAair_combined)
+
 #8 Hint: the dimensions of this dataset should be 14,752 x 9.
 library(dplyr)
 
+Date_Mutate <- EPAair_combined %>%
+  mutate(month = month(Date),
+         year = year(Date))
+
 EPAair_combined.processed <- 
-EPAair_combined %>%
+Date_Mutate %>%
 filter(Site.Name %in% c ("Linville Falls", "Durham Armory", "Leggett",
          "Hattie Avenue", "Clemmons Middle", "Mendenhall School",
          "Frying Pan Mountain", "West Johnston Co.", "Garinger High School",
          "Castle Hayne", "Pitt Agri. Center", "Bryson City",
          "Millbrook School")) %>%
-mutate(month = month(Date)) %>%
-mutate(year = year(Date)) %>%
-group_by(Date, Site.Name,AQS_PARAMETER_DESC,COUNTY) %>%
+group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>%
 summarise(meanlat = mean(SITE_LATITUDE), 
-            meanlong = sd(SITE_LONGITUDE), 
+            meanlong = mean(SITE_LONGITUDE), 
             meanAQI = mean(DAILY_AQI_VALUE))
+
+#check
 dim(EPAair_combined.processed)
 
 #9
+EPAair_combined.processed.spread <- pivot_wider(EPAair_combined.processed,
+                  names_from = AQS_PARAMETER_DESC, values_from = meanAQI)
 
+#10 Call up the dimensions of your new tidy dataset
+dim(EPAair_combined.processed.spread)
 
-#10
-
-
-#11
-
-
+#11 Save your processed dataset with the following file name
+write.csv(EPAair_combined.processed.spread, row.names = FALSE, 
+          file = "./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+          
 ```
 
 
@@ -178,20 +186,35 @@ dim(EPAair_combined.processed)
 
 12. Use the split-apply-combine strategy to generate a summary data frame. Data should be grouped by site, month, and year. Generate the mean AQI values for ozone and PM2.5 for each group. Then, add a pipe to remove instances where mean **ozone** values are not available (use the function `drop_na` in your pipe). It's ok to have missing mean PM2.5 values in this result. 
 
-13. Call up the dimensions of the summary dataset.
 
 ```{r questions 12 and 13}
 
 #12
+EPAair_combined.processed.spread.mutate <- EPAair_combined.processed.spread %>%
+  mutate(month = month(Date),
+         year = year(Date))
 
+EPAair_Summary <- 
+EPAair_combined.processed.spread.mutate %>%
+group_by(Site.Name, month, year) %>%
+summarise(mean_AQI_PM2.5 = mean(PM2.5),
+          mean_AQI_O3 = mean(Ozone)) %>%
+          drop_na(mean_AQI_O3)
 
-#13
+EPAair_Summary_omit <- 
+EPAair_combined.processed.spread.mutate %>%
+group_by(Site.Name, month, year) %>%
+summarise(mean_AQI_PM2.5 = mean(PM2.5),
+          mean_AQI_O3 = mean(Ozone)) %>%
+          na.omit(mean_AQI_O3)
 
-
+#13 Call up the dimensions of the summary dataset
+dim(EPAair_Summary)
+dim(EPAair_Summary_omit)
 
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`? Hint: replace `drop_na` with `na.omit` in part 12 and observe what happens with the dimensions of the summary date frame.
 
-> Answer: 
+> Answer: na.omit got rid of more rows - it dropped to 101 vs the drop_na was at 182. na_omit will remove rows if any column is NA, whereas drop_na will drop only for specifically the column in the function.
 
