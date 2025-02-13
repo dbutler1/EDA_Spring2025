@@ -93,22 +93,29 @@ Say we want to plot the number of records each month in the Peter/Paul lakes dat
 
 ```{r Plot the number of records by month}
 #What kind of values are months?
-
+class(PeterPaul.chem.nutrients$month)
 
 #List unique values
-
+unique(PeterPaul.chem.nutrients$month)
 
 #Plot how many Lake observations occur each month
-
+PeterPaul.chem.nutrients %>%
+  ggplot() + 
+  geom_bar(aes(x=month))
 
 #Convert month to a factor -- with 12 levels, labelled with month names
-
+PeterPaul.chem.nutrients %>%
+  ggplot() + 
+  geom_bar(aes(x=factor(month,levels=1:12,labels=month.abb)))
 
 #Try again: Plot how many Lake observations occur each month
 
 
 #Alter to include missing months
-
+PeterPaul.chem.nutrients %>%
+  ggplot() + 
+  geom_bar(aes(x=factor(month,levels=1:12,labels=month.abb))) +
+  scale_x_discrete(drop=F,name="")
 
 #Tidy up the code
 
@@ -235,15 +242,24 @@ Exercise: build your own scatterplots of PeterPaul.chem.nutrients
 # Plot surface temperatures by day of  year. 
 # Color your points by year, and facet by lake in two rows.
 # Change the ylab name
+#Create a plot
+PeterPaul.chem.nutrients %>%
+  filter(depth==0) %>%
+  ggplot() + 
+  geom_point(aes(x=daynum,y=temperature_C,color=year4))+
+  facet_wrap(vars(lakename), ncol = 2)+
+  ylab(expression("Temperaure in C"))
 
-
-#2. 
+2. 
 # Plot temperature by date. Color your points by depth.
 # Change the size of your point to 0.5
 # Change the color palette to magma and play with direction (+- 1), which one makes more sense?
 # Change x axis to include marker/labels every 5 years
-
-
+PeterPaul.chem.nutrients %>%
+  ggplot() + 
+  geom_point(aes(x=sampledate,y=temperature_C,color=depth,dotsize=0.5))+
+  scale_color_viridis(option="magma",direction=-1)
+scale_x_date(date_breaks = "5 years",date_labels = "%Y")
 
 ```
 ## Plotting the relationship between two continuous variables: Scatterplot
