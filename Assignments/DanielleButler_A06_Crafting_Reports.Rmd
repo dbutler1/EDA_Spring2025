@@ -7,11 +7,6 @@ output:
     toc: true
     toc_depth: 2
 ---
-# Table of Contents
-
-\tableofcontents
-
-# List of Figures
 
 \listoffigures
 
@@ -118,8 +113,9 @@ knitr::kable(summary_PM25, caption = "Mean Particulates (2.5mm)", col.names =
 ```
 
 ---
+
 ## Task 4: Plots
-Below this paragraph, but above the horizonal line (`---`), create two separate
+Below this paragraph, but above the horizontal line (`---`), create two separate
 code chunks that create boxplots of the distribution of Ozone levels by month
 using, one for only records collected in 2018 and one for records in 2019.
 
@@ -129,7 +125,7 @@ side of the page and set the figure heights so both plots fit on the same page
 with minimal space remaining. Lastly, add a `fig.cap` chunk option to add a
 caption (title) to your plot that will display underneath the figure.
 
-```{r, echo = FALSE, fig.align ='left', fig.height=4,fig.cap="Title"}
+```{r, echo = FALSE, fig.align ='left', fig.height=4,fig.cap="2018 Monthly Ozone Levels"}
 
 summary2018_Ozone <- epa_data %>% 
   drop_na(Ozone) %>% 
@@ -137,9 +133,24 @@ summary2018_Ozone <- epa_data %>%
 
 plot_2018 <- ggplot(summary2018_Ozone) +
   geom_boxplot(aes(x=factor(Month),y=Ozone))+
-  labs(x="Month",y="Concentration Levels (ug/m^3)")
+  labs(x="Month",y="Concentration (ug/m^3)")+
+  ggtitle("Monthly Ozone Concentrations 2018")
             
 print(plot_2018)
+```
+
+```{r, echo = FALSE, fig.align ='left', fig.height=4,fig.cap="2019 Monthly Ozone Levels"}
+
+summary2019_Ozone <- epa_data %>% 
+  drop_na(Ozone) %>% 
+  filter(year(Date)==2019)
+
+plot_2019 <- ggplot(summary2019_Ozone) +
+  geom_boxplot(aes(x=factor(Month),y=Ozone))+
+  labs(x="Month",y="Concentration (ug/m^3)")+
+  ggtitle("Monthly Ozone Concentrations 2019")
+            
+print(plot_2019)
 ```
 
 ---
@@ -154,3 +165,4 @@ to create this knit document to GitHub. In the section below, add a link to your
 GitHub repository.
 
 ## Git Repository
+https://github.com/dbutler1/EDA_Spring2025/tree/main
