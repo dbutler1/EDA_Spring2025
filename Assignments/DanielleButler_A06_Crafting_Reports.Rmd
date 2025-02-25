@@ -2,17 +2,25 @@
 title: 'A06 - Crafting Reports'
 author: "Danielle Butler" 
 date: "Spring 2025"
-output: pdf_document
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
 ---
+# Table of Contents
+
+\tableofcontents
+
+# List of Figures
+
+\listoffigures
 
 ## Objectives:
-
 1.  More practice with R code chunk options
 2.  Gain proficiency with figures, tables (w/`Kable`) table of contents, etc.
 3.  Debugging knitting issues
 
 ## Directions
-
 1.  Rename this file `<FirstLast>_A06_CraftingReports.Rmd`
 (replacing `<FirstLast>` with your first and last name).
 2.  Change "Student Name" on line 3 (above) with your name.
@@ -44,11 +52,9 @@ Table: EPA Air Quality
 | Date       | 2018-2019                                 |
 | Source     | EPA Air Quality System (AQS)             |
 
-
 ## Task 2 - Import packages and data, suppressing messages
 Set the following R code chunk so that it runs when knit, but no messages,
 errors, or any output is shown. The code itself, however, should be displayed.
-
 ```{r project.setup,echo=TRUE, error=FALSE, eval=TRUE, message=FALSE,warning=FALSE}
 
 #Import libraries
@@ -67,23 +73,27 @@ epa_data <- read.csv(
 ---
 
 ## Task 3: Creating tables
-
-Set the following R code chunk to display two tables, using knitr's `kable()` function, one listing the mean PM2.5 concentrations for each county, and the other the same except for Ozone. 
-
--   The titles should be "Mean Particulates (2.5mm)" and "Mean Ozone", respectively. 
--   The column names should be "County" and "µg/m3" for both tables. (See tip below.)
--   Finally, round the concentration values in the 2nd column to two decimal places.
-
-Customize the chunk options such that the code is run but is not displayed in the knitted document. The output, however, should be displayed.
+Set the following R code chunk to display two tables, using knitr's `kable()`
+function, one listing the mean PM2.5 concentrations for each county, and the
+other the same except for Ozone. 
+-   The titles should be "Mean Particulates (2.5mm)" and "Mean Ozone",
+respectively. 
+-   The column names should be "County" and "µg/m3" for both tables.
+(See tip below.)
+-   Finally, round the concentration values in the 2nd column to two
+decimal places.
+Customize the chunk options such that the code is run but is not displayed in
+the knitted document. The output, however, should be displayed.
 
 > **TIPS:**
 >
-> -   Use `"$\\mu g/m^3$"` as a column name to generate a nicely formatted string via markdown/MathJax notation
+> -   Use `"$\\mu g/m^3$"` as a column name to generate a nicely formatted
+string via markdown/MathJax notation
 >
-> -   If your output table spans across two pages, try inserting a page break in the markdown just before your code chunk.
+> -   If your output table spans across two pages, try inserting a page break
+in the markdown just before your code chunk.
 
-
-```{r data.summary}
+```{r data.summary,echo=FALSE}
 #Compute mean PM2.5 concentration for each county, sorted by value
 summary_PM25 <- epa_data %>% 
   drop_na(PM2.5) %>% 
@@ -100,15 +110,37 @@ summary_Ozone <- epa_data %>%
   arrange(mean_Ozone)
 
 #Use the `kable` function to produce the 2 tables in markdown format
+knitr::kable(summary_Ozone, caption = "Mean Ozone", col.names = c("County",
+             "$\\mu g/m^3$"),digits = 2)
 
+knitr::kable(summary_PM25, caption = "Mean Particulates (2.5mm)", col.names = 
+               c("County", "$\\mu g/m^3$"),digits=2)
 ```
 
 ---
-
 ## Task 4: Plots
+Below this paragraph, but above the horizonal line (`---`), create two separate
+code chunks that create boxplots of the distribution of Ozone levels by month
+using, one for only records collected in 2018 and one for records in 2019.
 
-Below this paragraph, but above the horizonal line (`---`), create two separate code chunks that create boxplots of the distribution of Ozone levels by month using, one for only records collected in 2018 and one for records in 2019. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, align the plots on the left side of the page and set the figure heights so both plots fit on the same page with minimal space remaining. Lastly, add a `fig.cap` chunk option to add a caption (title) to your plot that will display underneath the figure.
+Customize the chunk options such that the final figures are displayed but not
+the code used to generate the figures. In addition, align the plots on the left
+side of the page and set the figure heights so both plots fit on the same page
+with minimal space remaining. Lastly, add a `fig.cap` chunk option to add a
+caption (title) to your plot that will display underneath the figure.
 
+```{r, echo = FALSE, fig.align ='left', fig.height=4,fig.cap="Title"}
+
+summary2018_Ozone <- epa_data %>% 
+  drop_na(Ozone) %>% 
+  filter(year(Date)==2018)
+
+plot_2018 <- ggplot(summary2018_Ozone) +
+  geom_boxplot(aes(x=factor(Month),y=Ozone))+
+  labs(x="Month",y="Concentration Levels (ug/m^3)")
+            
+print(plot_2018)
+```
 
 ---
 
@@ -116,6 +148,9 @@ Below this paragraph, but above the horizonal line (`---`), create two separate 
 
 ## Task 5: Knit and submit.
 
-Add a table of contents and list of figures to your document and knit to a PDF. Submit your PDF to Sakai, but also be sure to commit and push your Rmd file used to create this knit document to GitHub. In the section below, add a link to your GitHub repository.
+Add a table of contents and list of figures to your document and knit to a PDF.
+Submit your PDF to Sakai, but also be sure to commit and push your Rmd file used
+to create this knit document to GitHub. In the section below, add a link to your
+GitHub repository.
 
 ## Git Repository
