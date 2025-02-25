@@ -125,7 +125,7 @@ side of the page and set the figure heights so both plots fit on the same page
 with minimal space remaining. Lastly, add a `fig.cap` chunk option to add a
 caption (title) to your plot that will display underneath the figure.
 
-```{r, echo = FALSE, fig.align ='left', fig.height=4,fig.cap="2018 Monthly Ozone Levels"}
+```{r, echo = FALSE, fig.align ='left', fig.height=3,fig.cap="2018 Monthly Ozone Levels"}
 
 summary2018_Ozone <- epa_data %>% 
   drop_na(Ozone) %>% 
@@ -139,7 +139,7 @@ plot_2018 <- ggplot(summary2018_Ozone) +
 print(plot_2018)
 ```
 
-```{r, echo = FALSE, fig.align ='left', fig.height=4,fig.cap="2019 Monthly Ozone Levels"}
+```{r, echo = FALSE, fig.align ='left', fig.height=3,fig.cap="2019 Monthly Ozone Levels"}
 
 summary2019_Ozone <- epa_data %>% 
   drop_na(Ozone) %>% 
