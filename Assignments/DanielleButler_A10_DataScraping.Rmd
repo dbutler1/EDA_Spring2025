@@ -27,7 +27,24 @@ This exercise accompanies the lessons in Environmental Data Analytics on data sc
 
 ```{r 1. Project Setup, message = FALSE}
 #1 
+#Install familiar packages
+library(tidyverse);library(lubridate);library(viridis);library(here)
+here()
 
+#install.packages("rvest")
+library(rvest)
+
+#install.packages("dataRetrieval")
+library(dataRetrieval)
+
+#install.packages("tidycensus")
+library(tidycensus)
+
+# Set theme
+mytheme <- theme_classic() +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
 
 ```
 
@@ -39,7 +56,10 @@ This exercise accompanies the lessons in Environmental Data Analytics on data sc
 Indicate this website as the as the URL to be scraped. (In other words, read the contents into an `rvest` webpage object.)
 
 ```{r set.the.scraping.website}
-#2 
+#2
+#Fetch the web resources from the URL
+webpage <- read_html('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=03-32-010&year=2024')
+webpage
 
 ```
 
@@ -59,7 +79,30 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r scrape.the.data}
 #3 
+water_system_name <- webpage %>% 
+  html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
+  html_text()
+water_system_name
 
+pwsid <- webpage %>% 
+  html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
+  html_text()
+pwsid
+
+ownership <- webpage %>% 
+  html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
+  html_text()
+ownership
+
+max_day_use <- webpage %>% 
+  html_nodes("th~ td+ td") %>% 
+  html_text()
+max_day_use
+
+month <- webpage %>% 
+  html_nodes(".fancy-table:nth-child(30) tr+ tr th") %>% 
+  html_text()
+month
 
 ```
 
@@ -74,10 +117,23 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r create.a.dataframe.from.scraped.data}
 #4 
+df_water_use <- data.frame(Max_Day_Use = max_day_use, Month = month,
+                           Ownership = ownership, PWSID = pwsid,
+                           Water_System_Name = water_system_name)
 
+df_water_use$Month <- as.Date(paste("2024", df_water_use$Month, "01",
+                                    sep = "-"), format = "%Y-%b-%d")
+df_water_use$month_label <- format(df_water_use$Month, "%b")
 
-#5 
+#5
+library(ggplot2)
 
+ggplot(df_water_use, aes(x = Month, y = max_day_use,
+                         group = 1)) + 
+  geom_line() + 
+  labs(title = paste("2024 Water Usage Data For", water_system_name),
+    y = "Water Use (MGD)",
+    x = "Month")
 
 ```
 
@@ -90,15 +146,97 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r construct.a.scraping.function}
 #6. 
+#Construct the scraping web address, i.e. its URL
+the_base_url <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?'
+the_pwsid <- '03-32-010'
+the_year <- 2024
+the_scrape_url <- paste0(the_base_url, 'pwsid=', the_pwsid, '&year=', the_year)
+print(the_scrape_url)
 
+#Retrieve the website contents 
+the_website <- read_html(the_scrape_url)
+
+#Set the element address variables (determined in the previous step)
+the_water_system_name_tag <- 'div+ table tr:nth-child(1) td:nth-child(2)'
+the_pwsid_tag <- 'td tr:nth-child(1) td:nth-child(5)'
+the_ownership_tag <- 'div+ table tr:nth-child(2) td:nth-child(4)'
+the_data_tag <- 'th~ td+ td'
+the_month_tag <- '.fancy-table:nth-child(30) tr+ tr th'
+
+#Scrape the data items
+the_water_system_name <- the_website %>% html_nodes(the_water_system_name_tag) %>% html_text()
+the_pwsid <- the_website %>%   html_nodes(the_pwsid_tag) %>%  html_text()
+the_ownership <- the_website %>% html_nodes(the_ownership_tag) %>% html_text()
+the_data <- the_website %>% html_nodes(the_data_tag) %>% html_text()
+the_month <- the_website %>% html_nodes(the_month_tag) %>% html_text()
+
+#Construct a dataframe from the scraped data
+df_water_use <- data.frame("Month" = rep(1:12),
+                             "Year" = rep(the_year,12),
+                             "Max_Water_Use" = as.numeric(the_data)) %>% 
+  mutate(Ownership = !!the_ownership,
+         Water_System_Name = !!the_water_system_name,
+         PWSID = !!the_pwsid,
+         Year = !!the_year,
+         Date = my(paste(Month,"-",Year)))
+#plot
+library(ggplot2)
+ggplot(df_water_use,aes(x=Date,y=Max_Water_Use)) + 
+  geom_line() + 
+  labs(title = paste("Water usage data for",the_water_system_name),
+       y="Water Use (mgd)",
+       x="Date")
+
+#Create our scraping function
+scrape.it <- function(the_pwsid, the_year){
+
+#Retrieve the website contents 
+the_website <- read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?', 
+                                 'pwsid=', the_pwsid, '&year=', the_year))
+  
+#Set the element address variables (determined in the previous step)
+the_water_system_name_tag <- 'div+ table tr:nth-child(1) td:nth-child(2)'
+the_pwsid_tag <- 'td tr:nth-child(1) td:nth-child(5)'
+the_ownership_tag <- 'div+ table tr:nth-child(2) td:nth-child(4)'
+the_data_tag <- 'th~ td+ td'
+the_month_tag <- '.fancy-table:nth-child(30) tr+ tr th'
+  
+#Scrape the data items
+the_water_system_name <- the_website %>% html_nodes(the_water_system_name_tag) %>% html_text()
+the_pwsid <- the_website %>%   html_nodes(the_pwsid_tag) %>%  html_text()
+the_ownership <- the_website %>% html_nodes(the_ownership_tag) %>% html_text()
+the_data <- the_website %>% html_nodes(the_data_tag) %>% html_text()
+the_month <- the_website %>% html_nodes(the_month_tag) %>% html_text()
+  
+#Construct a dataframe from the scraped data
+df_water_use <- data.frame("Month" = rep(1:12),
+                             "Year" = rep(the_year,12),
+                             "Max_Water_Use" = as.numeric(the_data)) %>% 
+  mutate(Ownership = !!the_ownership,
+         Water_System_Name = !!the_water_system_name,
+         PWSID = !!the_pwsid,
+         Year = !!the_year,
+         Date = my(paste(Month,"-",Year)))
+
+#Return the dataframe
+return(df_water_use)}
 
 ```
 
 7. Use the function above to extract and plot max daily withdrawals for Durham (PWSID='03-32-010') for each month in 2020
 
 ```{r fetch.and.plot.Durham.2020.data}
-#7 
+#7 Extract 
+durham_df <- scrape.it('03-32-010',2020)
+view(durham_df)
 
+#Plot 
+library(ggplot2)
+ggplot(durham_df,aes(x=Date,y=Max_Water_Use)) + 
+  geom_line() + 
+  labs(title = paste("Water usage data for",the_water_system_name),
+       y="Water Use (mgd)",
+       x="Date")
 
 ```
 
@@ -106,7 +244,18 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r fetch.and.plot.Asheville.2020.data}
 #8 
+asheville_df <- scrape.it('01-11-010',2020)
+view(asheville_df)
 
+combined_data <- bind_rows(asheville_df,durham_df)
+
+#Plot 
+ggplot(combined_data,aes(x=Date,y=Max_Water_Use, color=Water_System_Name, group = Water_System_Name)) + 
+  geom_line() + 
+  labs(title = paste("Water usage data"),
+       y="Water Use (mgd)",
+       x="Date",
+       color="City")
 
 ```
 
@@ -118,9 +267,27 @@ In the code chunk below scrape these values, assigning them to four separate var
 ```{r fetch.and.plot.Asheville.multiyear.data }
 #9 
 
+the_years = rep(2018:2023)
+my_pwsid = '01-11-010'
+
+the_dfs <- lapply(X = the_years,
+                  FUN = scrape.it,
+                  the_pwsid=my_pwsid)
+
+the_df_multiyear <- bind_rows(the_dfs)
+
+ggplot(the_df_multiyear,aes(x=Month,y=Max_Water_Use,color=Year,group=Year)) + 
+  geom_line() + 
+  scale_x_continuous(breaks = 1:12) +
+  geom_smooth(method="loess",se=FALSE,color='red') +
+  theme_classic() +
+  labs(title = paste("Water usage data"),
+       y="Water Use (mgd)",
+       x="Date",
+       color="City")
 
 ```
 
 Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
-> Answer:
+> Answer: From what I can tell, no. It varies monthly, but cannot say definitively if it varies over year.
 >
